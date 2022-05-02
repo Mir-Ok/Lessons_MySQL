@@ -1,0 +1,23 @@
+Фильтровать можно по разным условиям: остаток по товару 0, регистрация в определенный год и пр.
+
+1. Значение в поле равно числу:
+   SELECT `id`, `name` FROM `good` WHERE `count` = 0;
+   SELECT `id`, `name` FROM `good` WHERE `count` >= 25;
+   SELECT `id`, `name` FROM `good` WHERE `count` < 10;
+   
+2. Исключение/неравенство значению (цифра или текст)
+   SELECT * FROM `order_status` WHERE `code` != `NEW`; (WHERE `code` - имя поля, != - неравенство, 'NEW' - строкое значение, 
+                                                        кавычки, если " - то экранируем /")
+
+3. Фильтрация по датам
+   Отберем всех, кто регался после 1 января 2019
+   SELECT `id`,`name` FROM `user` WHERE `reg_date` >= '2019-01-01' (даты в кавычках, как и строки)
+   SELECT `id`,`name` FROM `user` WHERE `reg_date` >= '2019-01-01 22:55:15' (все по убыванию, время через :)
+   
+   Диапазон дат (с 1 по 21 января):
+   SELECT `id`,`name` FROM `user` WHERE `reg_date` >= '2019-01-01' AND <= '2019-01-21'
+   SELECT `id`,`name` FROM `user` WHERE `reg_date`BETWEEN '2019-01-01' AND '2019-01-21' (слово вместо операторов сравнения)
+   
+   Все заказы за месяц
+   ELECT * FROM `order` WHERE `creation_date` BETWEEN '2019-07-01' AND '2019-07-31'
+                                                        
