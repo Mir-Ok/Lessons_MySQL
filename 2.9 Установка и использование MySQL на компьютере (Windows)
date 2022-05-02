@@ -1,0 +1,12 @@
+Переходим на MySQL.com, находим MySQL Community Server --> баннер Installer for Windows (all sql products)
+--> выбираем самый большой --> No thanks, just start my download (качаем, отказавшись от регистрации)
+--> Custom --> Server, Workbench (аналог phpMyAdmin) --> ... --> Root Password 12345pPass, здесь же можно 
+добавить пользователей --> ... --> Finish
+
+Войдем в первую имеющуюся ДБ, введем пароль, создадим новую (Create a new schema ..), имя Shop,
+кодировки utf-8 и utf8_general_ci, Apply и закрываем ее, БД готова.
+
+Раздел MANAGEMENT - Data Import/Restore - Import From self-contained - подставляем файл
+Degault Target Schema - выбираем созданную базу shop - Start Import
+
+После выбираем вкладку Schemas (слева, около Administration) и видим базу и ее таблицы
