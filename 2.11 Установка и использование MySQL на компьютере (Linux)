@@ -1,0 +1,32 @@
+На примере Ubunty 
+
+Скачиваем отдельно Community Server: операционка Ubunty Linux (посмотреть версию в терминале: lsb_release -d)
+Далее Download Now, нажав на баннер - установили
+Открываем терминал, устанавливаем скачанное: sudo apt install mysql-server
+
+Скачиваем MySQL Workbench 8.0.29, все параметры аналогичны, с указанием версии операционки 
+Открываем терминал, устанавливаем скачанное: sudo apt install mysql-server
+(https://losst.ru/neudovletvorennye-zavisimosti-ubuntu)
+Не сработало, установила из Software
+
+Открываем Workbench, пробуем отрыть БД и провал. Пробуем mysql -u root -p (без пароля) и не пускает.
+
+Вариант 1. 
+По умолчанию MySQL использует аутентификацию сокетов для аутентификации пользователя, 
+поэтому нам нужно передать приведенную ниже команду, чтобы изменить механизм пароля.
+
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+где  ALTER USER - Команда MySQL для изменения сведений о пользователе
+     'root'@'localhost'  введите корневую информацию вместе с хостом
+     IDENTIFIED WITH mysql_native_password BY (изм. механизма пароля socket_auth на mysql_native_password)
+     'password';  передать кодовую фразу.
+
+Вариант2.  
+Это происходит потому что подключение в таком режиме, что только через командную строку от имени root:
+sudo mysql -u root (без пароля)
+
+Теперь, когда зашли, нужно разрешить подключение без терминала, от имени любого пользователя:
+- use mysql
+- update user set plugin='mysql_native_password' where user='root'; (алгоритм замены root)
+- flush privileges;
+- quit
