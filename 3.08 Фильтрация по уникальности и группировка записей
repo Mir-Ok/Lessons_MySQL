@@ -1,0 +1,47 @@
+1. Фильтрация по уникальности
+
+SELECT DISTINCT `status_id` FROM `order` (выбираем уникальные статусы заказов - уникальность по одному полю)
+ 
+SELECT DISTINCT `src_status_id`,`dst_status_id` FROM `order_status_change`
+    (получить все уникальные переходы между статусами заказов - уникальность по связке полей)
+
+Сложный пример без разбора: вывод статусов, но по названиям, не по кодам
+
+SELECT DISTINCT s1.name, s2.name
+FROM `order_status_change` ch
+JOIN order_status s1 ON s1.id = ch.src_status_id
+JOIN order_status s2 ON s2.id = ch.dst_status_id
+
+
+-------------------------
+2. Группировка по одному или нескольким полям
+
+2.1 Выведем результаты, уникальные по полю src_status_id, но не уникальные по dst_status_id
+SELECT `src_status_id`, dst_status_id` FROM `order_status_change GROUP BY `src_status_id`
+
+2.2 Вывести перечень категорий с примером товаров в них:
+SELECT `category_id`,`name` FROM `good` GROUP BY `category_id`
+   (из таблицы `good` выводим два поля `category_id`,`name`, то в `category_id` только уникальные значения, т.к. нужен
+   пример каждой категории, какие именно будут товары не суть)
+   
+2.3 Вывести количество тех или иных элементов:   
+SELECT `category_id`, COUNT(*) FROM `good` GROUP BY `category_id`
+    (запрос выведет количество товаров указанной категории в виде таблицы из двух столбцов)
+    
+Усложненный вариант запроса с псевдонимами? название товара и количество на складе
+SELECT 
+	c.name, 
+    COUNT(*) `count`
+FROM `good` g
+JOIN good_category с ON c.id = g.category_id
+GROUP BY g.category_id
+
+При желании можно добавить сортировку по убыванию:
+ORDER BY `count` DESC
+
+2.4 Группируем по нескольким полям
+SELECT * FROM `order_status_change` GROUP BY `src_status_id`,`dst_status_id`
+Выведет все уникальные комбинации по указанным полям (не уникальное значение поле, а уникальное сочетание полей)
+
+Этот запрос аналогичен:
+SELECT DISTINCT  `src_status_id`,`dst_status_id` FROM `order_status_change`
