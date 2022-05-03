@@ -45,3 +45,9 @@ SELECT * FROM `order_status_change` GROUP BY `src_status_id`,`dst_status_id`
 
 Этот запрос аналогичен:
 SELECT DISTINCT  `src_status_id`,`dst_status_id` FROM `order_status_change`
+
+
+Задача 1. Запрос 1. Вывести id статусов заказов, которые вообще встречаются в таблице order
+SELECT DISTINCT `status_id` FROM `order`  
+
+Задача 2. Запрос 2. Вывести id товаров и количества заказов, в которых они встречаются
