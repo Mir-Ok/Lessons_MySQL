@@ -51,3 +51,4 @@ SELECT DISTINCT  `src_status_id`,`dst_status_id` FROM `order_status_change`
 SELECT DISTINCT `status_id` FROM `order`  
 
 Задача 2. Запрос 2. Вывести id товаров и количества заказов, в которых они встречаются
+SELECT `good_id`, COUNT(*)  FROM `order2good` GROUP BY `good_id` LIMIT 15
