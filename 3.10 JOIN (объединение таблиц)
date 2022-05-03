@@ -1,0 +1,102 @@
+Вывод данных не только из той таблицы, где мы, но и из связанных с ней таблиц.
+Зачем? Вывести новую таблицу, что собрана из полей двух рахных таблиц, по сути, связать их.
+
+Оператор JOIN (соединять) 
+Разберем запрос ниже. 
+После FROM стоит имя таблицы, из которой надо вывести данные - `good`
+После JOIN имя таблицы, которую нужно связать - `good_category`
+После  ON стоит условие связки: в таблице `good_category` значение `id` совпадает со значением `category_id` 
+   в таблице `good` 
+Обращение к полю таблицы через точку: таблица.поле - `good_category`.`id` 
+После SELECT то, что вывести: `name` из - `good_category` и `name` из `good`
+
+SELECT
+  `good_category`.`name`,
+  `good`.`name`
+FROM `good`
+JOIN `good_category` ON 
+  `good_category`.`id` =  `good`.`category_id`
+ 
+Результат работы: таблица из двух полей, оба имеют имя name (по имени соотв. полей) 
+Чтобы избежать путаницы, добавим новые имена полям через пробел
+
+SELECT
+  `good_category`.`name` categoryName,
+  `good`.`name` goodName
+FROM `good`
+JOIN `good_category` ON 
+  `good_category`.`id` =  `good`.`category_id`
+  
+Задавать псевдонимы можно и таблицам, это делается при первом обращении к ним.
+Именно к ним по названию, не к полям (добавилось FROM `good` и JOIN `good_category` с):
+
+SELECT
+  `good_category`.`name` categoryName,
+  `good`.`name` goodName
+FROM `good` g
+JOIN `good_category` с ON 
+  `good_category`.`id` =  `good`.`category_id`
+  
+Теперь заменим все сотальное в соотв. с введенными псевдонимами. Запрос стал компактнее:
+
+SELECT
+  c.`name` categoryName,
+  g.`name` goodName
+FROM `good` g
+JOIN `good_category` с ON 
+  c.`id` =  g.`category_id`
+  
+Мы познакомились с механизмами объединения таблиц. В работе часто нужно эти связи использовать.
+Есть три типа сроединений:
+- INNER JOIN (внутреннее объединение, inner по умолчанию) - выведется то, что встречается в обеих таблицах
+- LERT JOIN (левое) - выведется все, что есть в первой таблице и соотв. первой записи из второй. 
+      Если для какой-то таблицы нет соответствия, то выводится NULL 
+- RIGHT JOIN (правое) - аналогично, но для второй, наоборот
+
+Практика: LEFT JOIN
+Есть таблица с товарами `good` (поля id, category_id, name, count, price) и таблица `order` (поля id, user_id, 
+status_id, creation_data).
+За связь между ними отвечает таблица `order2good`
+
+Найдем товары, которые не заказывают. Только те записи, в которых в поле oeder_id стоит NULL 
+SELECT 
+   g.name, o2g.order_id
+FROM `good` g
+LEFT JOIN `order2good` o2g ON o2g.good_id = g.id
+WHERE o2g.order_id IS NULL
+  
+  
+---------------
+Объединение нескольких таблиц
+
+SELECT 
+  c.name categoryName,
+  g.name productname,
+  o.creation_date orderDate,
+  u.name
+  
+FROM `good` g
+JOIN `good_category` c ON c.id = g.category_id
+JOIN `order2good` o2g  ON o2g.good_id = g.id
+JOIN `order` o         ON o.id = o2g.order_id
+JOIN `user` u          ON u.id = o.user_id
+
+Есть возможность добавить условие (например, только за январь): 
+
+SELECT 
+  c.name categoryName,
+  g.name productname,
+  o.creation_date orderDate,
+  u.name
+  
+FROM `good` g
+JOIN `good_category` c ON c.id = g.category_id
+JOIN `order2good` o2g  ON o2g.good_id = g.id
+JOIN `order` o         ON o.id = o2g.order_id AND
+    o.creation_data BETWEEN '2019-01-01' AND '2019-01-31'
+JOIN `user` u          ON u.id = o.user_id
+
+По сути, оператор ON аналогимчен оператору WHERE, можно писать несколько условий и проверять их
+
+
+
