@@ -99,4 +99,10 @@ JOIN `user` u          ON u.id = o.user_id
 По сути, оператор ON аналогимчен оператору WHERE, можно писать несколько условий и проверять их
 
 
-
+Запрос 1. Вывести имена статусов заказов и количества заказов, находящихся в этих статусах
+SELECT 
+	os.name, 
+    COUNT(*) `count`  
+FROM `order` o 
+JOIN `order_status` os ON os.id = o.status_id 
+GROUP BY os.name
